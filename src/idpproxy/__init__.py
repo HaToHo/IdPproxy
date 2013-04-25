@@ -147,7 +147,10 @@ def authn_response(server_env, req_info, userid, identity,
 
     logger.info("LOGIN success: sp_entity_id=%s#authn=%s" % (req_info.sender(),
                                                              authn))
-    logger.debug("AuthNResponse: %s" % authn_resp)
+    try:
+        logger.debug("AuthNResponse: %s" % authn_resp.encode('utf-8'))
+    except Exception:
+        logger.debug("AuthNResponse: can not be logged.")
 
     ht_args = _idp.apply_binding(binding, "%s" % authn_resp, destination,
                                  req_info.relay_state, response=True)
