@@ -247,6 +247,8 @@ class OpenIDConnect(Social):
 
         tot_info = userinfo.update(inforesp.to_dict())
 
+        userinfo = self.convert(userinfo)
+
         logger.debug("UserInfo: %s" % inforesp)
         session["permanent_id"] = userinfo["uid"]
         #session["service"] = provider_conf["issuer"]
@@ -257,7 +259,7 @@ class OpenIDConnect(Social):
         server_env["CACHE"][sid] = session
         environ["QUERY_STRING"] = ""
 
-        return True, self.convert(userinfo), session
+        return True, userinfo, session
 
 
 
