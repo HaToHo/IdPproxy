@@ -22,7 +22,7 @@ class OAuth2(Social):
         Social.__init__(self, client_id, client_secret, **kwargs)
         self.access_token_response = AccessTokenResponse
         try:
-            self._scope = ",".join(self.extra["scope"])
+            self._scope = self.extra["scope"] # ",".join(self.extra["scope"])
         except KeyError:
             self._scope = ""
         self.token_response_body_type = "urlencoded"
