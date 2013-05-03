@@ -264,7 +264,7 @@ if __name__ == '__main__':
     idp_conf = import_module(args.config)
     metadata = idp_conf.CONFIG["metadata"]
     if _key:
-        generateMetadata = MetadataGeneration(
+        generateMetadata = MetadataGeneration(idp_conf.CONFIG,
             logger, idp_proxy_conf.SERVICE, publicKey=_key, privateKey=key,
             metadataList=[metadata])
     else:

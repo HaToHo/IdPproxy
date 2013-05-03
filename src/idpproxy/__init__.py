@@ -192,8 +192,9 @@ def do_req_response(server_env, req_info, response, environ, source,
 
     session["identity"] = identity
     session["eptid"] = identity["eduPersonTargetedID"]
+    authnVal = {"class_ref": saml.AUTHN_PASSWORD,"authn_auth": source}
     return authn_response(server_env, req_info, userid, identity,
-                          authn=(saml.AUTHN_PASSWORD, source), service=service)
+                          authn=authnVal, service=service)
 
 
 def do_logout_response(req_info, status=None):

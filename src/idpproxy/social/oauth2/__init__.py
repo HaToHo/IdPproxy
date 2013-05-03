@@ -95,14 +95,14 @@ class OAuth2(Social):
 
         logger.info("Userinfo: %s" % result.text)
         profile = json.loads(result.text)
-
+        profile = self.convert(profile)
         logger.info("PROFILE: %s" % (profile, ))
         session["service"] = self.name
         session["authentication"] = "OK"
         session["status"] = "SUCCESS"
         session["authn_auth"] = self.authenticating_authority
-        session["permanent_id"] = profile["id"]
+        session["permanent_id"] = profile["uid"]
 
         server_env["CACHE"][sid] = session
 
-        return True, self.convert(profile), session
+        return True, profile, session

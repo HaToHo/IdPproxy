@@ -1,6 +1,5 @@
-import cgi
-
 __author__ = 'Hans Hoerberg - Copyright 2013 Umea Universitet'
+import cgi
 import re
 import os
 import xmldsig
@@ -26,6 +25,7 @@ from saml2.extension import idpdisc
 from saml2.extension import dri
 from saml2.extension import ui
 from saml2 import md
+from saml2.config import Config
 
 # The class is responsible for taking care of all requests for generating SP
 # metadata for the social services used by the IdPproxy.
@@ -81,7 +81,7 @@ class MetadataGeneration(object):
     #Needed for reading metadatafiles.
     CONST_ATTRCONV = attribute_converter.ac_factory("attributemaps")
 
-    def __init__(self, logger, conf, publicKey, privateKey, metadataList):
+    def __init__(self, idp_conf, logger, conf, publicKey, privateKey, metadataList):
         """
         Constructor.
         Initiates the class.
@@ -125,10 +125,16 @@ class MetadataGeneration(object):
 
         self.xmlsec_path = xmlsec_path
 
+        config = Config()
+        config.disable_ssl_certificate_validation = True
+        config.key_file = idp_conf["key_file"]
+        config.cert_file = idp_conf["cert_file"]
+        config.xmlsec_binary = idp_conf["xmlsec_binary"]
+        config.debug = idp_conf["debug"]
+
         for metadata in metadataList:
             mds = MetadataStore(MetadataGeneration.CONST_ONTS.values(),
-                                MetadataGeneration.CONST_ATTRCONV, xmlsec_path,
-                                disable_ssl_certificate_validation=True)
+                                MetadataGeneration.CONST_ATTRCONV, config)
             mds.imp(metadata)
             for entityId in mds.keys():
                 self.spKeyList.append(entityId)
